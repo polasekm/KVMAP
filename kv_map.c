@@ -33,13 +33,15 @@ void kv_map_init(kv_map_t *kv_map, const kv_str_map_t *str_map, uint32_t count)
   kv_map->count = count;
 }
 //-----------------------------------------------------------------------------
-void kv_map_kv(const kv_map_t *kv_map, char *key, char *value, jsonfl_type_t val_type, uint8_t deep) //json->cfg
+void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonfl_type_t val_type, uint8_t deep) //json->cfg
 {
   uint32_t i;
 
   for(i = 0; i < kv_map->count; i++)
   {
-    if(strncmp(kv_map->str_map[i].key, key, strlen(key)) == 0)
+    size_t key_len=strlen(kv_map->str_map[i].key);
+    if((strncmp(kv_map->str_map[i].key, key, key_len) == 0) &&
+       ((key[key_len]==' ') || (key[key_len]==':') || (key[key_len]=='\"') || (key[key_len]=='=') || (key[key_len]==0))) //vlastne by to mely byt vzdy " nebo 0 ale v SMSce i mezera nebo =
     {
       switch(val_type)
       {
@@ -102,7 +104,8 @@ void kv_map_kv(const kv_map_t *kv_map, char *key, char *value, jsonfl_type_t val
               break;
 
             case KV_STR_TYPE_STR:
-              strcpy((char*)kv_map->str_map[i].addr, value);
+              strncpy((char*)kv_map->str_map[i].addr, value, kv_map->str_map[i].len);
+              ((char*)kv_map->str_map[i].addr)[kv_map->str_map[i].len - 1] = 0;
               break;
 
             case KV_STR_TYPE_BIN:

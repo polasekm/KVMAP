@@ -79,7 +79,7 @@ typedef struct
 
 void kv_map_init(kv_map_t *kv_map, const kv_str_map_t *str_map, uint32_t count);
 
-void kv_map_kv(const kv_map_t *kv_map, char *key, char *value, jsonfl_type_t val_type, uint8_t deep);
+void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonfl_type_t val_type, uint8_t deep);
 char* kv_map_json_kv(const kv_map_t *kv_map, char *json_kv, uint32_t item);
 
 
