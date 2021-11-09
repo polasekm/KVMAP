@@ -33,15 +33,19 @@ void kv_map_init(kv_map_t *kv_map, const kv_str_map_t *str_map, uint32_t count)
   kv_map->count = count;
 }
 //-----------------------------------------------------------------------------
-void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonfl_type_t val_type, uint8_t deep) //json->cfg
+void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonfl_type_t val_type, uint8_t _deep_unused, uint8_t case_sensitive) //json->cfg
 {
   uint32_t i;
 
   for(i = 0; i < kv_map->count; i++)
   {
     size_t key_len=strlen(kv_map->str_map[i].key);
-    if((strncmp(kv_map->str_map[i].key, key, key_len) == 0) &&
-       ((key[key_len]==' ') || (key[key_len]==':') || (key[key_len]=='\"') || (key[key_len]=='=') || (key[key_len]==0))) //vlastne by to mely byt vzdy " nebo 0 ale v SMSce i mezera nebo =
+    uint8_t shoda;
+    if (case_sensitive)
+      shoda=strncmp(kv_map->str_map[i].key, key, key_len) == 0;
+    else
+      shoda=strncasecmp(kv_map->str_map[i].key, key, key_len) == 0;
+    if(shoda && (strchr(" :\"=\0", key[key_len])!=NULL)) //vlastne by key[key_len] mela byt vzdy 0 ale v SMSce i mezera nebo =
     {
       switch(val_type)
       {
