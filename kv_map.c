@@ -405,14 +405,18 @@ char* kv_map_json_kv(const kv_map_t *kv_map, char *json_kv, uint32_t item) //cfg
       break;
 
     case KV_STR_TYPE_DOUBLE:
-      sprintf(json_kv, "%f", *(double*)kv_map->str_map[item].addr);
+      sprintf(json_kv, "%.10f", *(double*)kv_map->str_map[item].addr); //%f prints as 50.111111
       break;
 
     case KV_STR_TYPE_STR:
-      strcat(json_kv, "\"");
-      strcat(json_kv, (char*)kv_map->str_map[item].addr);
-      strcat(json_kv, "\"");
-      break;
+      {
+        char *writing_point=json_kv+strlen(json_kv);
+        size_t nolimits=1000;
+
+        strcat(json_kv, "\"");
+        json_putstring(&writing_point, &nolimits, (char*)kv_map->str_map[item].addr);
+        strcat(json_kv, "\"");
+      } break;
 
     case KV_STR_TYPE_BIN:
       break;
