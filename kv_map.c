@@ -410,10 +410,11 @@ char* kv_map_json_kv(const kv_map_t *kv_map, char *json_kv, uint32_t item) //cfg
 
     case KV_STR_TYPE_STR:
       {
-        char *writing_point=json_kv+strlen(json_kv);
+        char *writing_point;
         size_t nolimits=1000;
 
         strcat(json_kv, "\"");
+        writing_point=json_kv+strlen(json_kv);
         json_putstring(&writing_point, &nolimits, (char*)kv_map->str_map[item].addr);
         strcat(json_kv, "\"");
       } break;
