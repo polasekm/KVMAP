@@ -27,6 +27,31 @@
 
 /* Private functions ---------------------------------------------------------*/
 
+float kv_pu8floatLE(const unsigned char *ptr)
+{
+  float result;
+  memmove(&result, ptr, sizeof(float));
+  return result;
+}
+
+void kv_floatpu8LE(unsigned char *ptr, float val)
+{
+  memmove(ptr, &val, sizeof(float));
+}
+
+double kv_pu8doubleLE(const unsigned char *ptr)
+{
+  double result;
+  memmove(&result, ptr, sizeof(double));
+  return result;
+}
+
+void kv_doublepu8LE(unsigned char *ptr, double val)
+{
+  memmove(ptr, &val, sizeof(double));
+}
+
+
 void kv_map_init(kv_map_t *kv_map, const kv_str_map_t *str_map, uint32_t count)
 {
   kv_map->str_map = str_map;
@@ -100,11 +125,11 @@ void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonf
               break;
 
             case KV_STR_TYPE_FLOAT:
-              *(float*)kv_map->str_map[i].addr = atof(value);
+              kv_floatpu8LE(kv_map->str_map[i].addr, atof(value));
               break;
 
             case KV_STR_TYPE_DOUBLE:
-              *(double*)kv_map->str_map[i].addr = atof(value);
+              kv_doublepu8LE(kv_map->str_map[i].addr, atof(value));
               break;
 
             case KV_STR_TYPE_STR:
@@ -177,11 +202,11 @@ void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonf
               break;
 
             case KV_STR_TYPE_FLOAT:
-              *(float*)kv_map->str_map[i].addr = 1;
+              kv_floatpu8LE(kv_map->str_map[i].addr, 1);
               break;
 
             case KV_STR_TYPE_DOUBLE:
-              *(double*)kv_map->str_map[i].addr = 1;
+              kv_doublepu8LE(kv_map->str_map[i].addr, 1);
               break;
 
             case KV_STR_TYPE_STR:
@@ -246,11 +271,11 @@ void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonf
               break;
 
             case KV_STR_TYPE_FLOAT:
-              *(float*)kv_map->str_map[i].addr = 0;
+              kv_floatpu8LE(kv_map->str_map[i].addr, 0);
               break;
 
             case KV_STR_TYPE_DOUBLE:
-              *(double*)kv_map->str_map[i].addr = 0;
+              kv_doublepu8LE(kv_map->str_map[i].addr, 0);
               break;
 
             case KV_STR_TYPE_STR:
@@ -315,11 +340,11 @@ void kv_map_kv(const kv_map_t *kv_map, const char *key, const char *value, jsonf
               break;
 
             case KV_STR_TYPE_FLOAT:
-              *(float*)kv_map->str_map[i].addr = 0;
+              kv_floatpu8LE(kv_map->str_map[i].addr, 0);
               break;
 
             case KV_STR_TYPE_DOUBLE:
-              *(double*)kv_map->str_map[i].addr = 0;
+              kv_doublepu8LE(kv_map->str_map[i].addr, 0);
               break;
 
             case KV_STR_TYPE_STR:
@@ -401,11 +426,11 @@ char* kv_map_json_kv(const kv_map_t *kv_map, char *json_kv, uint32_t item) //cfg
       break;
 
     case KV_STR_TYPE_FLOAT:
-      sprintf(json_kv, "%f", *(float*)kv_map->str_map[item].addr);
+      sprintf(json_kv, "%f", kv_pu8floatLE(kv_map->str_map[item].addr));
       break;
 
     case KV_STR_TYPE_DOUBLE:
-      sprintf(json_kv, "%.10f", *(double*)kv_map->str_map[item].addr); //%f prints as 50.111111, %.10f as 50.1111211112
+      sprintf(json_kv, "%.10f", kv_pu8doubleLE(kv_map->str_map[item].addr)); //%f prints as 50.111111, %.10f as 50.1111211112
       break;
 
     case KV_STR_TYPE_STR:
