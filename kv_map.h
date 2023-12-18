@@ -51,7 +51,7 @@ typedef struct kv_str_map_ts kv_str_map_t;
 struct kv_str_map_ts
 
 {
-  char *key;                  //key name
+  const char *key;            //key name
 
   kv_str_map_type_t type;     //value type
   uint16_t len;               //value len (if appl.)

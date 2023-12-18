@@ -405,7 +405,7 @@ char* kv_map_json_kv(const kv_map_t *kv_map, char *json_kv, uint32_t item) //cfg
       break;
 
     case KV_STR_TYPE_DOUBLE:
-      sprintf(json_kv, "%.10f", *(double*)kv_map->str_map[item].addr); //%f prints as 50.111111, %.10f as 50.1111211112
+      sprintf(json_kv, "%.10f", *(double*)kv_map->str_map[item].addr); //%f prints as 50.111111
       break;
 
     case KV_STR_TYPE_STR:
