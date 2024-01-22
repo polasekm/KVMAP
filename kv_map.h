@@ -56,10 +56,10 @@ struct kv_str_map_ts
   kv_str_map_type_t type;     //value type
   uint16_t len;               //value len (if appl.)
 
-  void (*set)(kv_str_map_t *kv_str_map, ...);      //setter fce
-  void (*get)(kv_str_map_t *kv_str_map, ...);      //getter fce
+  const void (*set)(kv_str_map_t *kv_str_map, ...);      //setter fce
+  const void (*get)(kv_str_map_t *kv_str_map, ...);      //getter fce
 
-  void *addr;                 //pointer to update dst. value in memory
+  const void *addr;                 //pointer to update dst. value in memory
 
   //void (*set)(kv_str_map_t *kv_str_map);      //setter fce
   //void (*get)(kv_str_map_t *kv_str_map);      //getter fce
